@@ -7,8 +7,8 @@ import random
 
 # Vamos ler os dados como uma lista
 print("Lendo o documento...")
-with open("chicago.csv", "r") as file_read:   
-    full_data_list = data_list = [{k: v for k, v in row.items()} 
+with open("chicago.csv", "r") as file_read:
+    data_list = [{k: v for k, v in row.items()} 
         for row in csv.DictReader(file_read, skipinitialspace=True)]
 print("Ok!")
 
@@ -32,7 +32,8 @@ for item in data_list[:20]:
     print(item)
 
 # Vamos mudar o data_list para remover o cabeçalho dele.
-data_list = data_list[1:]
+#data_list = data_list[1:]
+#Devido a utilização do DictReader, não há a necessidade de remover o cabeçalho da lista 
 
 # Nós podemos acessar as features pelo índice
 # Por exemplo: sample[6] para imprimir gênero, ou sample[-2]
@@ -60,8 +61,7 @@ def column_to_list(data, index):
     Retorna:
         Lista com os valores da coluna referente ao index.
     '''
-    # Observação: Foi utilizado o full_data_list e não o data_list como base para poder obter os 1551505 registros
-    key = list(full_data_list[0].keys())[index]
+    key = list(data_list[0].keys())[index]
     column_list = []
     # Dica: Você pode usar um for para iterar sobre as amostras, pegar a feature pelo seu índice, e dar append para uma lista
     for item in data:
@@ -72,8 +72,6 @@ def column_to_list(data, index):
 # Vamos checar com os gêneros se isso está funcionando (apenas para os primeiros 20)
 print("\nTAREFA 3: Imprimindo a lista de gêneros das primeiras 20 amostras")
 print(column_to_list(data_list, -2)[:20])
-
-data_list = full_data_list # Foi atribuido novamente ao data_list o full_data_list devido a comparação realizada nos assets
 
 # ------------ NÃO MUDE NENHUM CÓDIGO AQUI ------------
 assert type(column_to_list(data_list, -2)) is list, "TAREFA 3: Tipo incorreto retornado. Deveria ser uma lista."
@@ -170,24 +168,43 @@ assert most_popular_gender(data_list) == "Male", "TAREFA 6: Resultado de retorno
 
 # Se tudo está rodando como esperado, verifique este gráfico!
 gender_list = column_to_list(data_list, -2)
-types = ["Male", "Female"]
-quantity = count_gender(data_list)
-y_pos = list(range(len(types)))
-plt.bar(y_pos, quantity)
-plt.ylabel('Quantidade')
-plt.xlabel('Gênero')
-plt.xticks(y_pos, types)
-plt.title('Quantidade por Gênero')
-plt.show(block=True)
+# gender_list = column_to_list(data_list, -2)
+# types = ["Male", "Female"]
+# quantity = count_gender(data_list)
+# y_pos = list(range(len(types)))
+# plt.bar(y_pos, quantity)
+# plt.ylabel('Quantidade')
+# plt.xlabel('Gênero')
+# plt.xticks(y_pos, types)
+# plt.title('Quantidade por Gênero')
+# plt.show(block=True)
 
 input("Aperte Enter para continuar...")
 # TAREFA 7
 # TODO: Crie um gráfico similar para user_types. Tenha certeza que a legenda está correta.
 print("\nTAREFA 7: Verifique o gráfico!")
+def count_users(data_list):
+    '''
+      Função que retorno a quantidade de tipos de usuários identificada no data_list.
+      Argumentos:
+          data_list: Arquivo no formato de dictionary.
+      Retorna:
+          quantidade de tipos de usuários identificada no data_list.
+    '''
+    subscriber = 0
+    costumer = 0
+
+    for item in data_list:
+        if item['User'].title() == 'Customer':
+            female += 1
+        elif item['User'].title() == 'Subscriber':
+            male += 1
+
+    return [male, female]
 
 user_types = column_to_list(data_list, -3)
 types = ["Customer", "Subscriber"]
-quantity = count_gender(data_list)
+quantity = count_users(data_list)
 y_pos = list(range(len(types)))
 plt.bar(y_pos, quantity)
 plt.ylabel('Quantidade')
@@ -243,7 +260,9 @@ center = round(trip_list_length / 2)
 trip_duration_list.sort()
 
 if trip_list_length % 2 == 0:
-    median_trip = sum(trip_duration_list[center - 1:center + 1]) / 2.0
+    for n in trip_duration_list:
+        median_trip += n
+    median_trip = median_trip / 2.0
 else:
     median_trip = trip_duration_list[center]
 
@@ -301,8 +320,19 @@ def count_items(column_list):
       Retorna:
           Uma lista de item_types e uma lista de count_items.
     '''
-    item_types = list(set(column_list))
-    count_items = [1 for x in column_list]
+    #Trecho do Código Original
+    #item_types = list(set(column_list))
+    #count_items = [1 for x in column_list]
+
+    #Trecho do código ajustado conforme a review da primeira entrega do projeto
+    item_types = list(set(columns_list))
+    count_items = [0 for _ in range(len(item_types))]
+    for e in column_list:
+        i = 0
+        while e != item_type[i]:
+            i+=1
+        count_items[i] +=1
+
     return item_types, count_items
 
 if answer == "yes":
