@@ -182,7 +182,7 @@ gender_list = column_to_list(data_list, -2)
 input("Aperte Enter para continuar...")
 # TAREFA 7
 # TODO: Crie um gráfico similar para user_types. Tenha certeza que a legenda está correta.
-print("\nTAREFA 7: Verifique o gráfico!")
+
 def count_users(data_list):
     '''
       Função que retorno a quantidade de tipos de usuários identificada no data_list.
@@ -195,12 +195,12 @@ def count_users(data_list):
     costumer = 0
 
     for item in data_list:
-        if item['User'].title() == 'Customer':
-            female += 1
-        elif item['User'].title() == 'Subscriber':
-            male += 1
+        if item['User Type'].title() == 'Customer':
+            costumer += 1
+        elif item['User Type'].title() == 'Subscriber':
+            subscriber += 1
 
-    return [male, female]
+    return [costumer, subscriber]
 
 user_types = column_to_list(data_list, -3)
 types = ["Customer", "Subscriber"]
@@ -304,6 +304,7 @@ def new_function(param1: int, param2: str) -> list:
           Uma lista de valores x.
 
       '''
+print("Todos os comentário foram revisados com sucesso.")
 
 input("Aperte Enter para continuar...")
 # TAREFA 12 - Desafio! (Opcional)
@@ -325,11 +326,11 @@ def count_items(column_list):
     #count_items = [1 for x in column_list]
 
     #Trecho do código ajustado conforme a review da primeira entrega do projeto
-    item_types = list(set(columns_list))
+    item_types = list(set(column_list))
     count_items = [0 for _ in range(len(item_types))]
     for e in column_list:
         i = 0
-        while e != item_type[i]:
+        while e != item_types[i]:
             i+=1
         count_items[i] +=1
 
